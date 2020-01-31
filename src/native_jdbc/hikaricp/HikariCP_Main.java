@@ -4,18 +4,37 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.zaxxer.hikari.HikariDataSource;
+import javax.swing.JDialog;
 
+import native_jdbc.dao.DepartmentDao;
+import native_jdbc.dao.DepartmentDaoImpl;
 import native_jdbc.dao.EmployeeDao;
 import native_jdbc.dao.EmployeeDaoImpl;
-import native_jdbc.ds.DBCP_DataSource;
-import native_jdbc.ds.Hikari_DataSource;
 import native_jdbc.ds.Hikari_DataSource2;
+import native_jdbc.dto.Department;
 import native_jdbc.dto.Employee;
+import native_jdbc.ui.DlgEmployee;
 
 public class HikariCP_Main {
 
 	public static void main(String[] args)  {
+		
+		try (Connection con = Hikari_DataSource2.getConnection()) {
+			//소속부서사원검색테스트(con);
+			DepartmentDao dao = DepartmentDaoImpl.getInstance();
+			//추가할 부서 정보 생성
+			Department newDept = new Department(7, "경영지원", 60);
+			//dao.insertDepartment(con, newDept);
+			//dao.updateDepartment(con, newDept);
+			dao.deleteDepartment(con, newDept);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			//한번 더 추가하면 에러남
+			// System.out.println(e.getMessage()); -> Duplicate entry '6' for key 'PRIMARY'
+			// System.out.println(e.getErrorCode()); -> 1062
+		}
+		
 		//일반
 		//native_jdbc.dao.EmployeeDaoImpl@15db9742
 		//native_jdbc.dao.EmployeeDaoImpl@6d06d69c
@@ -34,17 +53,26 @@ public class HikariCP_Main {
 		//EmployeeDao dao4 = EmployeeDaoImpl.getInstance();
 		//System.out.println(dao3);
 		//System.out.println(dao4);
-		EmployeeDao dao3 = EmployeeDaoImpl.getInstance();
-		try {
-			List<Employee> list = dao3.selectEmployeeByAll(Hikari_DataSource2.getConnection());
-			for(Employee e:list) {
-				System.out.println(e);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		
+		
+		
 		/*
+		 * EmployeeDao dao3 = EmployeeDaoImpl.getInstance(); try { List<Employee> list =
+		 * dao3.selectEmployeeByAll(Hikari_DataSource2.getConnection()); for(Employee
+		 * e:list) { System.out.println(e); } } catch (SQLException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); }
+		 */
+		
+		
+		
+		
+		
+		
+		
+		
+		/*
+		 * 
 		 * for(int i=0; i<100; i++){ EmployeeDao dao3 = EmployeeDaoImpl.getInstance();
 		 * System.out.println(dao3); }
 		 */
@@ -60,6 +88,22 @@ public class HikariCP_Main {
 		 * try(Connection con3 = DBCP_DataSource.getConnection();) {
 		 * System.out.println(con3); } catch (SQLException e) { e.printStackTrace(); }
 		 */
+	}
+
+	private static void 소속부서사원검색테스트(Connection con) throws SQLException {
+		EmployeeDao dao = EmployeeDaoImpl.getInstance();
+		Department dept = new Department();
+		dept.setDeptNo(4);
+
+		List<Employee> list = dao.selectEmployeeGroupByDno(con, dept);
+		for (Employee e : list) {
+			System.out.println(e);
+		}
+		//DlgEmployee main에서 가져옴
+		DlgEmployee dialog = new DlgEmployee();
+		dialog.setEmpList(list);
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		dialog.setVisible(true);
 	}
 
 }

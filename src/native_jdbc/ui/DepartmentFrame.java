@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -17,6 +18,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
 
 import native_jdbc.dto.Department;
+import native_jdbc.dto.Employee;
 import native_jdbc.ui.content.DepartmentPanel;
 import native_jdbc.ui.list.DepartmentTblPanel;
 import native_jdbc.ui.service.DepartmentUIService;
@@ -33,6 +35,7 @@ public class DepartmentFrame extends JFrame implements ActionListener {
 	private JButton btnAdd;
 	private JButton btnCancel;
 	private DepartmentUIService service;
+	private DlgEmployee dialog;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -49,6 +52,8 @@ public class DepartmentFrame extends JFrame implements ActionListener {
 
 	public DepartmentFrame() {
 		service = new DepartmentUIService();
+		dialog = new DlgEmployee();
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		initialize();
 	}
 	
@@ -82,7 +87,7 @@ public class DepartmentFrame extends JFrame implements ActionListener {
 		pList = new DepartmentTblPanel();
 		contentPane.add(pList);
 		
-		List<Department> depts = service.showDepartments();
+		depts = service.showDepartments();
 		pList.loadData(depts);
 		
 		pList.setPopupMenu(createPopupMenu());
@@ -98,9 +103,18 @@ public class DepartmentFrame extends JFrame implements ActionListener {
 	}
 	
 	protected void btnAddActionPerformed(ActionEvent e) {
-		Department std = pDepartment.getItem();
-		JOptionPane.showMessageDialog(null, std);
-		pDepartment.clearTf();
+			//System.out.println(e.getActionCommand());
+		if(e.getActionCommand().equals("추가")) {
+			Department std = pDepartment.getItem();	
+			pDepartment.clearTf();
+		}else if(e.getActionCommand().equals("수정")) {
+			Department newDept = pDepartment.getItem();
+			int idx = pList.getSelectedRowIdx();
+			pList.updateRow(newDept, idx);
+		}
+			
+
+		
 	}
 	
 	protected void btnCancelActionPerformed(ActionEvent e) {
@@ -126,18 +140,42 @@ public class DepartmentFrame extends JFrame implements ActionListener {
 	}
 	
 	ActionListener myPopMenuListener = new ActionListener() {
+		
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("수정")) {
-				JOptionPane.showMessageDialog(null, "수정");
+				//JOptionPane.showMessageDialog(null, "수정");
+				Department upDept = pList.getSelectedItem();
+				pDepartment.setItem(upDept);
+				btnAdd.setText("수정");
+				
 			}
 			if (e.getActionCommand().equals("삭제")) {
 				JOptionPane.showMessageDialog(null, "삭제");
 			}
 			if (e.getActionCommand().equals("소속 사원")) {
+				//선택한 부서의 정보
 				Department selectedDept = pList.getSelectedItem();
-				JOptionPane.showMessageDialog(null, "소속 사원" + selectedDept);
+				//JOptionPane.showMessageDialog(null, "소속 사원" + selectedDept);
+				
+				List<Employee> list = service.showEmployeeGroupByDno(selectedDept);
+				
+				dialog.setEmpList(list);
+				dialog.setTitle(selectedDept.getDeptName() + "부서");
+				System.out.println(e.getSource());
+				JMenuItem item = (JMenuItem) e.getSource();
+				System.out.println(item.getLocation());
+				dialog.setVisible(true);
 			}
+			if (e.getActionCommand().equals("추가")) {
+				btnAddActionPerformed(e);
+			}else {
+				
+			}
+			
+			
 		}
-	}; 
+	};
+	private List<Department> depts; 
 }

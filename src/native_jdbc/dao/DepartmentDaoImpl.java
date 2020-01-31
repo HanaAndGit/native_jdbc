@@ -15,6 +15,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 	
 	//static, final로 
 	private static final DepartmentDaoImpl instance = new DepartmentDaoImpl();
+	//클래스의 타입으로 선언되었을 때 객체라고 부르고, 그 객체가 메모리에 할당되어 실제 사용될 때 인스턴스라고 부른다.
 
 	//private으로 지정/ 외부에서 생성할 수 없도록 
 	private DepartmentDaoImpl() {
@@ -54,6 +55,50 @@ public class DepartmentDaoImpl implements DepartmentDao {
 		String deptName = rs.getString("deptname");
 		int floor = rs.getInt("floor");
 		return new Department(deptno, deptName, floor);
+	}
+
+	@Override
+	public int insertDepartment(Connection con, Department department) throws SQLException {
+		String sql = "insert into department values(?, ?, ?)";
+		int res = -1;
+		try(PreparedStatement pstmt = con.prepareStatement(sql)){
+			pstmt.setInt(1, department.getDeptNo());
+			pstmt.setString(2, department.getDeptName());
+			pstmt.setInt(3, department.getFloor());
+			System.out.println(pstmt);
+			res = pstmt.executeUpdate();
+		}
+		
+		return res;
+	}
+
+	@Override
+	public int updateDepartment(Connection con, Department department) throws SQLException {
+		String sql = "update department set deptname = ?, floor = ? \r\n" + 
+				"	where deptno = ?";
+		int res = -1;
+		try(PreparedStatement pstmt = con.prepareStatement(sql)){
+			pstmt.setString(1, department.getDeptName());
+			pstmt.setInt(2, department.getFloor());
+			pstmt.setInt(3, department.getDeptNo());
+			System.out.println(pstmt);
+			res = pstmt.executeUpdate();
+		}
+		
+		return res;
+	}
+
+	@Override
+	public int deleteDepartment(Connection con, Department department) throws SQLException {
+		String sql = "delete from department where deptno = ?";
+		int res = -1;
+		try(PreparedStatement pstmt = con.prepareStatement(sql)){
+			pstmt.setInt(1, department.getDeptNo());
+			System.out.println(pstmt);
+			res = pstmt.executeUpdate();
+		}
+		
+		return res;
 	}
 
 }

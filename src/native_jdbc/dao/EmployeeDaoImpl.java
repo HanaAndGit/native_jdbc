@@ -35,6 +35,44 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		
 		return null;
 	}
+	
+
+	@Override
+	public List<Employee> selectEmployeeGroupByDno(Connection con, Department dept) throws SQLException {
+		//String sql = "select empno, empname, title, manager, salary, dno from employee where dno = ?";
+		String sql = "select e.empno, e.empname, e.title, m.empno as manager_no, m.empname as manager_name, e.salary, e.dno, d.deptname\r\n" + 
+				"	  from employee e left join employee m on e.manager = m.empno join department d on e.dno = d.deptno\r\n" + 
+				"	  where deptno = ?";
+		List<Employee> list = new ArrayList<>();
+		try(PreparedStatement pstmt = con.prepareStatement(sql);){
+			//pstmt.setInt(1,dept.getDeptNo()... -> 불가능) -> try Reset을 아래에 써줘야함
+			pstmt.setInt(1, dept.getDeptNo());
+			System.out.println(pstmt);
+			try(ResultSet rs = pstmt.executeQuery()){
+				while(rs.next()) {
+					list.add(getEmployeeFull(rs));
+				}
+			}
+		}
+		return list;
+	}
+	
+	private Employee getEmployeeFull(ResultSet rs) throws SQLException {
+		//실제 칼럼명
+		int empNo = rs.getInt("empno");
+		//System.out.println(rs.getInt("empno"));
+		String empName = rs.getString("empname");
+		String title = rs.getString("title");
+		Employee manager = new Employee(rs.getInt("manager_no"));
+		manager.setEmpName(rs.getString("manager_name"));//sql에서 as로 쓰는 이름
+		int salary = rs.getInt("salary");
+		Department dept = new Department(); 
+		dept.setDeptNo(rs.getInt("dno"));
+		dept.setDeptName(rs.getString("deptname"));
+		return new Employee(empNo, empName, title, manager, salary, dept);
+	}
+
+
 
 	@Override
 	public List<Employee> selectEmployeeByAll(Connection con) throws SQLException {
@@ -46,8 +84,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		List<Employee> list = new ArrayList<>();
 		try(PreparedStatement pstmt = con.prepareStatement(sql);
 			ResultSet rs = pstmt.executeQuery()){
-			System.out.println(pstmt);
-			list.add(getEmployee(rs));
+			while(rs.next()) {
+				list.add(getEmployee(rs));
+			}
 		}
 		
 		return list;
@@ -73,5 +112,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		}
 		return null;
 	}
+
+
+
 
 }
