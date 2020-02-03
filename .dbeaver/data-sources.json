@@ -13,6 +13,36 @@
 				"database": "mysql_study",
 				"url": "jdbc:mysql://localhost:3306/mysql_study",
 				"home": "C:\\Program Files\\MySQL\\MySQL Server 5.7",
+				"type": "dev"
+			}
+		},
+		"mysql5-170098a72cb-4e2d79f7467a1976": {
+			"provider": "mysql",
+			"driver": "mysql5",
+			"name": "MySQL - localhost(root)",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"url": "jdbc:mysql://localhost:3306/",
+				"home": "C:\\Program Files\\MySQL\\MySQL Server 5.7",
+				"type": "dev",
+				"handlers": {}
+			}
+		},
+		"mysql5-170099ff2aa-168d0f8198d21a75": {
+			"provider": "mysql",
+			"driver": "mysql5",
+			"name": "MySQL - native_jdbc_study",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"database": "native_jdbc_study",
+				"url": "jdbc:mysql://localhost:3306/native_jdbc_study",
+				"home": "C:\\Program Files\\MySQL\\MySQL Server 5.7",
 				"type": "dev",
 				"handlers": {}
 			}
