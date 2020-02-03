@@ -10,7 +10,7 @@ import native_jdbc.dao.DepartmentDao;
 import native_jdbc.dao.DepartmentDaoImpl;
 import native_jdbc.dao.EmployeeDao;
 import native_jdbc.dao.EmployeeDaoImpl;
-import native_jdbc.ds.Hikari_DataSource2;
+import native_jdbc.ds.MySqlDataSource;
 import native_jdbc.dto.Department;
 import native_jdbc.dto.Employee;
 import native_jdbc.ui.DlgEmployee;
@@ -19,7 +19,7 @@ public class HikariCP_Main {
 
 	public static void main(String[] args)  {
 		
-		try (Connection con = Hikari_DataSource2.getConnection()) {
+		try (Connection con = MySqlDataSource.getConnection()) {
 			//소속부서사원검색테스트(con);
 			DepartmentDao dao = DepartmentDaoImpl.getInstance();
 			//추가할 부서 정보 생성

@@ -11,7 +11,7 @@ import native_jdbc.dao.DepartmentDao;
 import native_jdbc.dao.DepartmentDaoImpl;
 import native_jdbc.dao.EmployeeDao;
 import native_jdbc.dao.EmployeeDaoImpl;
-import native_jdbc.ds.Hikari_DataSource2;
+import native_jdbc.ds.MySqlDataSource;
 import native_jdbc.dto.Department;
 import native_jdbc.dto.Employee;
 
@@ -24,7 +24,7 @@ public class DepartmentUIService {
 	
 	public DepartmentUIService() {
 		try {
-			con = Hikari_DataSource2.getConnection();
+			con = MySqlDataSource.getConnection();
 			deptDao = DepartmentDaoImpl.getInstance(); 
 			empDao = EmployeeDaoImpl.getInstance();
 		} catch (SQLException e) {

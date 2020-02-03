@@ -10,7 +10,7 @@ import com.mysql.jdbc.PacketTooBigException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public class Hikari_DataSource2 {
+public class MySqlDataSource {
 	private static HikariDataSource ds;
 	private static int minIdle = 10;
 	//미리 만들어놓을 커넥션은 100개 
@@ -29,7 +29,7 @@ public class Hikari_DataSource2 {
 		}
 	}
 	
-	private Hikari_DataSource2() {} //외부에서 new datasource 금지
+	private MySqlDataSource() {} //외부에서 new datasource 금지
 	
 	public static Connection getConnection() throws SQLException {
 		return ds.getConnection();
