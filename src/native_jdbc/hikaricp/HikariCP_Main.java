@@ -7,9 +7,9 @@ import java.util.List;
 import javax.swing.JDialog;
 
 import native_jdbc.dao.DepartmentDao;
-import native_jdbc.dao.DepartmentDaoImpl;
 import native_jdbc.dao.EmployeeDao;
-import native_jdbc.dao.EmployeeDaoImpl;
+import native_jdbc.dao.impl.DepartmentDaoImpl;
+import native_jdbc.dao.impl.EmployeeDaoImpl;
 import native_jdbc.ds.MySqlDataSource;
 import native_jdbc.dto.Department;
 import native_jdbc.dto.Employee;

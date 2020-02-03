@@ -1,4 +1,4 @@
-package native_jdbc.dao;
+package native_jdbc.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import native_jdbc.dao.EmployeeDao;
 import native_jdbc.dto.Department;
 import native_jdbc.dto.Employee;
 
@@ -69,6 +69,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		Department dept = new Department(); 
 		dept.setDeptNo(rs.getInt("dno"));
 		dept.setDeptName(rs.getString("deptname"));
+		
 		return new Employee(empNo, empName, title, manager, salary, dept);
 	}
 

@@ -11,4 +11,5 @@ public interface DepartmentDao {//DepartmentDaoImpl 에서 thorws 복사해서 �
 	int insertDepartment(Connection con, Department department) throws SQLException;
 	int updateDepartment(Connection con, Department department) throws SQLException;
 	int deleteDepartment(Connection con, Department department) throws SQLException;
+	Department selectDepartmentByNo(Connection con, int dno) throws SQLException;
 }

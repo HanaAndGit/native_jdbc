@@ -7,6 +7,8 @@ public class Employee {
 	private Employee manager;
 	private int salary;
 	private Department dept;
+	private byte[] pic;
+	
 	public Employee() {
 		// TODO Auto-generated constructor stub
 	}
@@ -15,8 +17,7 @@ public class Employee {
 	public Employee(int empNo) {
 		this.empNo = empNo;
 	}
-
-
+	
 	public Employee(int empNo, String empName, String title, Employee manager, int salary, Department dept) {
 		this.empNo = empNo;
 		this.empName = empName;
@@ -24,6 +25,18 @@ public class Employee {
 		this.manager = manager;
 		this.salary = salary;
 		this.dept = dept;
+		this.pic = pic;
+	}
+
+
+	public Employee(int empNo, String empName, String title, Employee manager, int salary, Department dept, byte[] pic) {
+		this.empNo = empNo;
+		this.empName = empName;
+		this.title = title;
+		this.manager = manager;
+		this.salary = salary;
+		this.dept = dept;
+		this.pic = pic;
 	}
 
 
@@ -87,10 +100,23 @@ public class Employee {
 	}
 
 
+	
+	
+	
+	public byte[] getPic() {
+		return pic;
+	}
+
+
+	public void setPic(byte[] pic) {
+		this.pic = pic;
+	}
+
+
 	@Override
 	public String toString() {
-		return String.format("[%s %s %s %s %s %s]", 
-				empNo, empName, title, manager==null?"":manager.getEmpNo(), salary, dept.getDeptNo());
+		return String.format("[%s %s %s %s %s %s %s]", 
+				empNo, empName, title, manager==null?"":manager.getEmpNo(), salary, dept.getDeptNo(), pic==null?"null":pic.length);
 	}
 	
 	

@@ -68,6 +68,7 @@ public class EmployeeTblPanel extends AbstractTblPanel<Employee> {
 		int salary = (int) model.getValueAt(selectedIdx, 4);
 		Department dept = new Department();
 		dept.setDeptNo((int)model.getValueAt(selectedIdx, 5));
+		String pic = (String) model.getValueAt(selectedIdx, 6);
 		
 		return new Employee(empNo, empName, title, manager, salary, dept);
 	}
