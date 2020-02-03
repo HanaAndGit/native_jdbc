@@ -28,6 +28,7 @@ public class HikariCP_Main {
 			//dao.updateDepartment(con, newDept);
 			dao.deleteDepartment(con, newDept);
 			
+			System.out.println(con);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			//한번 더 추가하면 에러남
