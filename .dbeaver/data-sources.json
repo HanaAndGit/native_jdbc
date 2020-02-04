@@ -1,21 +1,6 @@
 {
 	"folders": {},
 	"connections": {
-		"mysql5-16ff557569a-1bc88cffb0920b86": {
-			"provider": "mysql",
-			"driver": "mysql5",
-			"name": "MySQL - mysql_study(user)",
-			"save-password": true,
-			"read-only": false,
-			"configuration": {
-				"host": "localhost",
-				"port": "3306",
-				"database": "mysql_study",
-				"url": "jdbc:mysql://localhost:3306/mysql_study",
-				"home": "C:\\Program Files\\MySQL\\MySQL Server 5.7",
-				"type": "dev"
-			}
-		},
 		"mysql5-170098a72cb-4e2d79f7467a1976": {
 			"provider": "mysql",
 			"driver": "mysql5",
@@ -27,11 +12,41 @@
 				"port": "3306",
 				"url": "jdbc:mysql://localhost:3306/",
 				"home": "C:\\Program Files\\MySQL\\MySQL Server 5.7",
+				"type": "dev"
+			}
+		},
+		"mysql5-1700a9ea360-133a25766b77cc67": {
+			"provider": "mysql",
+			"driver": "mysql5",
+			"name": "MySQL - coffee2(user_coffee2)",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"database": "coffee2",
+				"url": "jdbc:mysql://localhost:3306/coffee2",
+				"home": "C:\\Program Files\\MySQL\\MySQL Server 5.7",
+				"type": "dev"
+			}
+		},
+		"mysql5-1700ec34de2-bdbe20f10b607a7": {
+			"provider": "mysql",
+			"driver": "mysql5",
+			"name": "MySQL - mysql_study",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"database": "mysql_study",
+				"url": "jdbc:mysql://localhost:3306/mysql_study",
+				"home": "C:\\Program Files\\MySQL\\MySQL Server 5.7",
 				"type": "dev",
 				"handlers": {}
 			}
 		},
-		"mysql5-170099ff2aa-168d0f8198d21a75": {
+		"mysql5-1700ec74070-19220f091c6446c5": {
 			"provider": "mysql",
 			"driver": "mysql5",
 			"name": "MySQL - native_jdbc_study",

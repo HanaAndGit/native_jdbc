@@ -1,15 +1,8 @@
-use native_jdbc_study;
 select user(), database ();
-select * from employee;
-select * from department;
 
-update employee set empno = 1004, empname = '서현진', title = '사원', manager = 1003, salary = 1500000, dno = 1 
-	where empno = 1004;
-/*
 SELECT * FROM department;
 select deptno, deptname, floor from department where deptno =3;
 SELECT * FROM employee;
-*/
 
 
 select deptno, deptname, floor from department;

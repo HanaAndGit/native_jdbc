@@ -7,13 +7,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import native_jdbc.dao.EmployeeDao;
 import native_jdbc.dto.Department;
 import native_jdbc.dto.Employee;
 
 public class EmployeeDaoImpl implements EmployeeDao {
 //singleton pattern
-	
+	private static Logger logger = LogManager.getLogger();
 	private static final EmployeeDaoImpl instance = new EmployeeDaoImpl();
 	
 	
@@ -31,11 +34,22 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 
 	@Override
-	public Employee selectEmployeeByDno(Connection con, Department dept) throws SQLException {
+	public Employee selectEmployeeByEmpno(Connection con, Employee emp) throws SQLException {
+		String sql = "select empno, empname, title, manager, salary, dno from employee where empno = ?";
+		try(PreparedStatement pstmt = con.prepareStatement(sql)){
+			pstmt.setInt(1, emp.getEmpNo());
+			try(ResultSet rs = pstmt.executeQuery()){
+				if(rs.next()) {
+					return getEmployeeFull(rs);
+				}
+			}
+		} 
 		
 		return null;
 	}
-	
+
+
+
 
 	@Override
 	public List<Employee> selectEmployeeGroupByDno(Connection con, Department dept) throws SQLException {
@@ -47,7 +61,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		try(PreparedStatement pstmt = con.prepareStatement(sql);){
 			//pstmt.setInt(1,dept.getDeptNo()... -> 불가능) -> try Reset을 아래에 써줘야함
 			pstmt.setInt(1, dept.getDeptNo());
-			System.out.println(pstmt);
+			//System.out.println(pstmt);
 			try(ResultSet rs = pstmt.executeQuery()){
 				while(rs.next()) {
 					list.add(getEmployeeFull(rs));
@@ -85,8 +99,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		List<Employee> list = new ArrayList<>();
 		try(PreparedStatement pstmt = con.prepareStatement(sql);
 			ResultSet rs = pstmt.executeQuery()){
+			logger.trace(pstmt);
 			while(rs.next()) {
-				list.add(getEmployee(rs));
+				list.add(getEmployee(rs, false));
 			}
 		}
 		
@@ -95,7 +110,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 
 
-	private Employee getEmployee(ResultSet rs)  {
+	private Employee getEmployee(ResultSet rs, boolean isPic)  {
 		int empNo;
 		try {
 			empNo = rs.getInt("empno");
@@ -106,12 +121,77 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			int salary = rs.getInt("salary");
 			Department dept = new Department(); 
 			dept.setDeptNo(rs.getInt("dno"));
+			Employee employee = new Employee(empNo, empName, title, manager, salary, dept); 
+			if(isPic) {
+				employee.setPic(rs.getBytes("pic"));
+			}
 			return new Employee(empNo, empName, title, manager, salary, dept);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+
+
+	@Override
+	public int deleteEmployee(Connection con, Employee employee) throws SQLException {
+		String sql = "delete from employee where empno = ?";
+		int res = -1;
+		try(PreparedStatement pstmt = con.prepareStatement(sql)){
+			pstmt.setInt(1, employee.getEmpNo());
+			res = pstmt.executeUpdate();
+		}
+		return res;
+	}
+
+
+
+	@Override
+	public int insertEmployee(Connection con, Employee employee) throws SQLException {
+		String sql = null;
+		if(employee.getPic()==null) {
+			//logger.debug("pic is null");
+			sql = "insert into employee(empno, empname, title, manager, salary, dno) values (?, ?, ?, ?, ?, ?)";
+		}else{
+			//logger.debug("pic is not null");
+			sql = "insert into employee values (?, ?, ?, ?, ?, ?, ?)";
+		}
+		try(PreparedStatement pstmt = con.prepareStatement(sql)){
+			pstmt.setInt(1, employee.getEmpNo());
+			pstmt.setString(2, employee.getEmpName());
+			pstmt.setString(3, employee.getTitle());
+			pstmt.setInt(4, employee.getManager().getEmpNo());
+			pstmt.setInt(5, employee.getSalary());
+			pstmt.setInt(6, employee.getDept().getDeptNo());
+			if(employee.getPic()!=null) {
+				pstmt.setBytes(7, employee.getPic());
+			}
+			return pstmt.executeUpdate();
+		}
+		
+	}
+
+
+
+	@Override
+	public int updateEmployee(Connection con, Employee employee) throws SQLException {
+		String sql = "update employee set empno = ?, empname = ?, title = ?, manager = ?, salary = ?, dno = ? where empno = ?";
+		int res = -1;
+		try(PreparedStatement pstmt = con.prepareStatement(sql)){
+			pstmt.setInt(1, employee.getEmpNo());
+			pstmt.setString(2, employee.getEmpName());
+			pstmt.setString(3, employee.getTitle());
+			pstmt.setInt(4, employee.getManager().getEmpNo());
+			pstmt.setInt(5, employee.getSalary());
+			pstmt.setInt(6, employee.getDept().getDeptNo());
+			pstmt.setInt(7, employee.getEmpNo());
+			logger.trace(pstmt);
+		//	System.out.println(pstmt + " !!");
+			res = pstmt.executeUpdate();
+		}
+		return res;
 	}
 
 
