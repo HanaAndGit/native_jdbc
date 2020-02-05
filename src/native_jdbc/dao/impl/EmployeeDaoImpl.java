@@ -35,18 +35,20 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 
 	@Override
-	public Employee selectEmployeeByEmpno(Connection con, Employee emp) throws SQLException {
-		String sql = "select empno, empname, title, manager, salary, dno from employee where empno = ?";
+	public Employee selectEmployeeByEmpNo(Connection con, Employee emp) {
+		String sql = "select empno, empname, title, manager, salary, dno, pic from employee where empno=?";
 		try(PreparedStatement pstmt = con.prepareStatement(sql)){
 			pstmt.setInt(1, emp.getEmpNo());
+			LogUtil.prnLog(pstmt);
 			try(ResultSet rs = pstmt.executeQuery()){
-				//if(rs.next()) {
-					return getEmployeeFull(rs);
-				//}
+				if (rs.next()) {
+					return getEmployee(rs, true);
+				}
 			}
-		} 
-		
-		//return null;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return null;
 	}
 
 
@@ -111,40 +113,33 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 
 
-	private Employee getEmployee(ResultSet rs, boolean isPic)  {
-		int empNo;
-		try {
-			empNo = rs.getInt("empno");
-			System.out.println(rs.getInt("empno"));
-			String empName = rs.getString("empname");
-			String title = rs.getString("title");
-			Employee manager = new Employee(rs.getInt("manager"));
-			int salary = rs.getInt("salary");
-			Department dept = new Department(); 
-			dept.setDeptNo(rs.getInt("dno"));
-			Employee employee = new Employee(empNo, empName, title, manager, salary, dept); 
-			if(isPic) {
-				employee.setPic(rs.getBytes("pic"));
-			}
-			return new Employee(empNo, empName, title, manager, salary, dept);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private Employee getEmployee(ResultSet rs, boolean isPic) throws SQLException {
+		int empNo = rs.getInt("empno");
+		String empName = rs.getString("empname");
+		String title = rs.getString("title");
+		Employee manager = new Employee(rs.getInt("manager"));
+		int salary = rs.getInt("salary");
+		Department dept = new Department();
+		dept.setDeptNo(rs.getInt("dno"));
+		Employee employee = new Employee(empNo, empName, title, manager, salary, dept);
+		if (isPic) {
+			employee.setPic(rs.getBytes("pic"));
 		}
-		return null;
+		return employee;
 	}
 
 
 
 	@Override
-	public int deleteEmployee(Connection con, Employee employee) throws SQLException {
+	public int deleteEmployee(Connection con, Employee employee) {
 		String sql = "delete from employee where empno = ?";
-		int res = -1;
-		try(PreparedStatement pstmt = con.prepareStatement(sql)){
-			pstmt.setInt(1, employee.getEmpNo());
-			res = pstmt.executeUpdate();
-		}
-		return res;
+	    try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+	        pstmt.setInt(1, employee.getEmpNo());
+	        LogUtil.prnLog(pstmt);
+	        return pstmt.executeUpdate();
+	    } catch (SQLException e) {
+	    	throw new RuntimeException(e);
+		} 
 	}
 
 
@@ -159,17 +154,21 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			//logger.debug("pic is not null");
 			sql = "insert into employee values (?, ?, ?, ?, ?, ?, ?)";
 		}
-		try(PreparedStatement pstmt = con.prepareStatement(sql)){
-			pstmt.setInt(1, employee.getEmpNo());
-			pstmt.setString(2, employee.getEmpName());
-			pstmt.setString(3, employee.getTitle());
-			pstmt.setInt(4, employee.getManager().getEmpNo());
-			pstmt.setInt(5, employee.getSalary());
-			pstmt.setInt(6, employee.getDept().getDeptNo());
-			if(employee.getPic()!=null) {
-				pstmt.setBytes(7, employee.getPic());
-			}
-			return pstmt.executeUpdate();
+		LogUtil.prnLog(sql);
+		try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+	        pstmt.setInt(1, employee.getEmpNo());
+	        pstmt.setString(2, employee.getEmpName());
+	        pstmt.setString(3, employee.getTitle());
+	        pstmt.setInt(4, employee.getManager().getEmpNo());
+	        pstmt.setInt(5, employee.getSalary());
+	        pstmt.setInt(6, employee.getDept().getDeptNo());
+	        LogUtil.prnLog(pstmt);
+	        if (employee.getPic()!=null) {
+	            pstmt.setBytes(7, employee.getPic());
+	        }
+	        return pstmt.executeUpdate();
+	    } catch (SQLException e) {
+			throw new RuntimeException(e);
 		}
 		
 	}
@@ -177,22 +176,23 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 
 	@Override
-	public int updateEmployee(Connection con, Employee employee) throws SQLException {
-		String sql = "update employee set empno = ?, empname = ?, title = ?, manager = ?, salary = ?, dno = ? where empno = ?";
-		int res = -1;
-		try(PreparedStatement pstmt = con.prepareStatement(sql)){
-			pstmt.setInt(1, employee.getEmpNo());
-			pstmt.setString(2, employee.getEmpName());
-			pstmt.setString(3, employee.getTitle());
-			pstmt.setInt(4, employee.getManager().getEmpNo());
-			pstmt.setInt(5, employee.getSalary());
-			pstmt.setInt(6, employee.getDept().getDeptNo());
-			pstmt.setInt(7, employee.getEmpNo());
-			LogUtil.prnLog(pstmt);
-		//	System.out.println(pstmt + " !!");
-			res = pstmt.executeUpdate();
+	public int updateEmployee(Connection con, Employee employee) {
+		String sql = "update employee set empname=?, title=?, manager=?, salary=?, dno=?, pic=? "
+	               + "where empno=?";
+	    try (PreparedStatement pstmt = con.prepareStatement(sql)) {
+	        pstmt.setString(1, employee.getEmpName());
+	        pstmt.setString(2, employee.getTitle());
+	        pstmt.setInt(3, employee.getManager().getEmpNo());
+	        pstmt.setInt(4, employee.getSalary());
+	        pstmt.setInt(5, employee.getDept().getDeptNo());
+	        pstmt.setInt(7, employee.getEmpNo());
+	        LogUtil.prnLog(pstmt);
+	        pstmt.setBytes(6, employee.getPic());
+	        return pstmt.executeUpdate();
+	    } catch (SQLException e) {
+			throw new RuntimeException(e);
 		}
-		return res;
+
 	}
 
 

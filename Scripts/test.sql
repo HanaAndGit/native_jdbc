@@ -36,3 +36,12 @@ insert into employee(empno, empname, title, manager, salary, dno) values
 (1365, '김상원', '사원', 3426, 1500000, 1),
 (2106, '김창섭', '대리', 1003, 2500000, 2),
 (3427, '최종철', '사원', 3011, 1500000, 3);
+
+select * from department;
+
+insert into department values(5, "마케팅", 8);
+update department set deptname = "마케팅2", floor = 7 where deptno = 0;
+delete from department where deptno = 7;
+select * from employee;
+
+

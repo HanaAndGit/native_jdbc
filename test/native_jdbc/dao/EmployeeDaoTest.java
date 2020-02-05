@@ -80,7 +80,7 @@ public class EmployeeDaoTest {
 		//LogUtil.prnLog("test01SelectEmployeeByDno()");
 		Employee emp = new Employee(1004);
 		try {
-			Employee selectedEmp = dao.selectEmployeeByEmpno(con, emp);
+			Employee selectedEmp = dao.selectEmployeeByEmpNo(con, emp);
 			if(selectedEmp.getPic()!=null) {
 				getImageToPic(selectedEmp.getPic(), emp.getEmpNo()); //프로젝트 폴더의 pics 폴더에 사원번호.jpg 파일이 생성됨
 			}

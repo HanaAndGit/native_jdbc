@@ -7,6 +7,7 @@ public class Employee {
 	private Employee manager;
 	private int salary;
 	private Department dept;
+	private int dno;
 	private byte[] pic;
 	
 	public Employee() {
@@ -25,7 +26,17 @@ public class Employee {
 		this.manager = manager;
 		this.salary = salary;
 		this.dept = dept;
-		this.pic = pic;
+	}
+	
+	
+
+	public Employee(int empNo, String empName, String title, Employee manager, int salary, int dno) {
+		this.empNo = empNo;
+		this.empName = empName;
+		this.title = title;
+		this.manager = manager;
+		this.salary = salary;
+		this.dno = dno;
 	}
 
 
