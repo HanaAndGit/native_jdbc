@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import native_jdbc.LogUtil;
 import native_jdbc.dao.EmployeeDao;
 import native_jdbc.dto.Department;
 import native_jdbc.dto.Employee;
@@ -39,13 +40,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		try(PreparedStatement pstmt = con.prepareStatement(sql)){
 			pstmt.setInt(1, emp.getEmpNo());
 			try(ResultSet rs = pstmt.executeQuery()){
-				if(rs.next()) {
+				//if(rs.next()) {
 					return getEmployeeFull(rs);
-				}
+				//}
 			}
 		} 
 		
-		return null;
+		//return null;
 	}
 
 
@@ -99,7 +100,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		List<Employee> list = new ArrayList<>();
 		try(PreparedStatement pstmt = con.prepareStatement(sql);
 			ResultSet rs = pstmt.executeQuery()){
-			logger.trace(pstmt);
+			LogUtil.prnLog(pstmt);
 			while(rs.next()) {
 				list.add(getEmployee(rs, false));
 			}
@@ -187,7 +188,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			pstmt.setInt(5, employee.getSalary());
 			pstmt.setInt(6, employee.getDept().getDeptNo());
 			pstmt.setInt(7, employee.getEmpNo());
-			logger.trace(pstmt);
+			LogUtil.prnLog(pstmt);
 		//	System.out.println(pstmt + " !!");
 			res = pstmt.executeUpdate();
 		}

@@ -23,6 +23,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import native_jdbc.LogUtil;
 import native_jdbc.dao.impl.DepartmentDaoImpl;
 import native_jdbc.dao.impl.EmployeeDaoImpl;
 import native_jdbc.ds.MySqlDataSource;
@@ -43,7 +44,7 @@ public class EmployeeDaoTest {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		//logger.debug("setUpBeforeClass()");
+		//LogUtil.prnLog("setUpBeforeClass()");
 		dao = EmployeeDaoImpl.getInstance();
 		picsDir = new File(System.getProperty("user.dir")+ File.separator +"pics" + File.separator); 
 		if(!picsDir.exists()) { //picsDir 폴더가 없으면 만들어주기
@@ -54,21 +55,21 @@ public class EmployeeDaoTest {
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		//logger.debug("tearDownAfterClass()");
+		//LogUtil.prnLog("tearDownAfterClass()");
 		//setUpBeforeClass 가 끝났기때문에 dao를 null 로 변경
 		dao = null; 
 	}
 
 	@Before
 	public void setUp() throws Exception {
-		//logger.debug("setUp()");
+		//LogUtil.prnLog("setUp()");
 		con = MySqlDataSource.getConnection();
 		//fail("Not yet implemented");
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		//logger.debug("tearDown()");
+		//LogUtil.prnLog("tearDown()");
 		con.close();
 		//fail("Not yet implemented");
 		
@@ -76,7 +77,7 @@ public class EmployeeDaoTest {
 
 	@Test
 	public void test01SelectEmployeeByEmpno() throws SQLException {
-		//logger.debug("test01SelectEmployeeByDno()");
+		//LogUtil.prnLog("test01SelectEmployeeByDno()");
 		Employee emp = new Employee(1004);
 		try {
 			Employee selectedEmp = dao.selectEmployeeByEmpno(con, emp);
@@ -108,12 +109,12 @@ public class EmployeeDaoTest {
 
 	@Test
 	public void test02SelectEmployeeByAll() {
-		logger.debug("test02SelectEmployeeByAll()");
+		//logger.debug("test02SelectEmployeeByAll()");
 		try {
 			List<Employee> lists = dao.selectEmployeeByAll(con);
 			Assert.assertNotEquals(-1, lists.size());
 			for(Employee e : lists) {
-				logger.trace(e);
+				LogUtil.prnLog(e);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -142,7 +143,8 @@ public class EmployeeDaoTest {
 
 	@Test
 	public void test06DeleteEmployee() {
-		
+		LogUtil.prnLog("test06DeleteEmployee()");
+		Employee employee = new Employee();
 		//logger.debug("test06DeleteEmployee()");
 		//fail("Not yet implemented");
 	}
@@ -153,7 +155,7 @@ public class EmployeeDaoTest {
 		Employee emp = new Employee(1004, "서현진", "사원", new Employee(1003), 1500000, new Department(1), getImage("seohyunjin.jpg"));
 		//logger.debug(emp);
 		int res = dao.insertEmployee(con, emp);
-		logger.trace(res);
+		LogUtil.prnLog(res);
 		Assert.assertEquals(1, res);
 		//fail("Not yet implemented");
 	}
@@ -181,7 +183,7 @@ public class EmployeeDaoTest {
 		Employee employee = new Employee(1004, "서현진", "대리", new Employee(1003), 1500000, new Department(1));
 		int res = dao.updateEmployee(con, employee);
 		Assert.assertEquals(1, res);
-		//logger.debug("test05UpdateEmployee()");
+		//LogUtil.prnLog("test05UpdateEmployee()");
 		//fail("Not yet implemented");
 	}
 

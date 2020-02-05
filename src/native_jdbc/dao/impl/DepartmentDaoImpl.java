@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import native_jdbc.LogUtil;
 import native_jdbc.dao.DepartmentDao;
 import native_jdbc.dto.Department;
 
@@ -46,7 +47,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 		try(PreparedStatement pstmt = con.prepareStatement(sql);
 			ResultSet rs = pstmt.executeQuery()){
 			//sysout 대신 logger.trace -> 로그에 찍힘
-			logger.trace(pstmt);
+			LogUtil.prnLog(pstmt);
 			while(rs.next()) {
 				list.add(getDepartment(rs));
 			}
@@ -72,7 +73,8 @@ public class DepartmentDaoImpl implements DepartmentDao {
 			pstmt.setInt(1, department.getDeptNo());
 			pstmt.setString(2, department.getDeptName());
 			pstmt.setInt(3, department.getFloor());
-			logger.trace(pstmt);
+			//logger.trace(pstmt);
+			LogUtil.prnLog(pstmt);
 			//System.out.println(pstmt);
 			res = pstmt.executeUpdate();
 		}
@@ -89,7 +91,9 @@ public class DepartmentDaoImpl implements DepartmentDao {
 			pstmt.setString(1, department.getDeptName());
 			pstmt.setInt(2, department.getFloor());
 			pstmt.setInt(3, department.getDeptNo());
-			logger.trace(pstmt);
+			//logger.trace(pstmt);
+			LogUtil.prnLog(pstmt);
+			
 			//System.out.println(pstmt);
 			res = pstmt.executeUpdate();
 		}
@@ -103,7 +107,8 @@ public class DepartmentDaoImpl implements DepartmentDao {
 		int res = -1;
 		try(PreparedStatement pstmt = con.prepareStatement(sql)){
 			pstmt.setInt(1, department.getDeptNo());
-			logger.trace(pstmt);
+			//logger.trace(pstmt);
+			LogUtil.prnLog(pstmt);
 			//System.out.println(pstmt);
 			res = pstmt.executeUpdate();
 		}
@@ -116,7 +121,8 @@ public class DepartmentDaoImpl implements DepartmentDao {
 		String sql = "select deptno, deptname, floor from department where deptno =?";
 		try(PreparedStatement pstmt = con.prepareStatement(sql);){
 			pstmt.setInt(1, dno);
-			logger.trace(pstmt);
+			//logger.trace(pstmt);
+			LogUtil.prnLog(pstmt);
 			try(ResultSet rs = pstmt.executeQuery()){
 				if (rs.next()) {
 					return getDepartment(rs);
