@@ -186,5 +186,18 @@ public class EmployeeDaoTest {
 		//LogUtil.prnLog("test05UpdateEmployee()");
 		//fail("Not yet implemented");
 	}
+	
+	
+	@Test
+	public void test06procedureEmployeeByDno() throws SQLException {
+		LogUtil.prnLog(Thread.currentThread().getStackTrace()[1].getMethodName() + "()");
+		List<Employee> list = dao.procedureEmployeeByDno(con, 2);
+		//0이 아니라면 list.size
+		Assert.assertNotEquals(0, list.size());
+		
+		for(Employee e : list) {
+			LogUtil.prnLog(e);
+		}
+	}
 
 }

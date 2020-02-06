@@ -22,4 +22,7 @@ public interface EmployeeDao {
 
 	Employee selectEmployeeByEmpNo(Connection con, Employee emp) throws SQLException;
 	
+	/* procedure call */
+	List<Employee> procedureEmployeeByDno(Connection con, int dno) throws SQLException;
+	
 }

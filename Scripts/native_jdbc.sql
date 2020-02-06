@@ -45,3 +45,19 @@ delete from department where deptno = 7;
 select * from employee;
 
 
+
+
+drop procedure if exists native_jdbc_study.procedure01;
+
+delimiter $$
+$$
+create procedure native_jdbc_study.procedure01(
+	in in_dno int
+	)
+begin
+	select empno, empname, title, manager, salary, dno
+		from employee
+	where dno = in_dno;
+end$$
+delimiter ;
+

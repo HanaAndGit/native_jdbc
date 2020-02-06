@@ -1,5 +1,6 @@
 package native_jdbc.dao.impl;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +10,8 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+
 
 import native_jdbc.LogUtil;
 import native_jdbc.dao.EmployeeDao;
@@ -193,6 +196,24 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			throw new RuntimeException(e);
 		}
 
+	}
+
+
+
+	@Override
+	public List<Employee> procedureEmployeeByDno(Connection con, int dno) throws SQLException {
+		String sql = "{call procedure01(?)}";
+		List<Employee> list = new ArrayList<>();
+		try(CallableStatement cs = con.prepareCall(sql)){
+			cs.setInt(1, dno);
+			LogUtil.prnLog(cs);
+			try(ResultSet rs = cs.executeQuery()){
+				while(rs.next()) {
+					list.add(getEmployee(rs, false));
+				}
+			}
+		}
+		return list;
 	}
 
 
